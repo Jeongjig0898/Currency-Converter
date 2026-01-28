@@ -3,6 +3,7 @@ const toSelect = document.getElementById('to');
 const amountInput = document.getElementById('amount');
 const swapButton = document.getElementById('swap');
 const resultText = document.getElementById('result-text');
+const lastUpdatedText = document.getElementById('last-updated');
 const darkModeToggle = document.getElementById('dark-mode-toggle');
 
 const currencies = ['USD', 'EUR', 'KRW', 'JPY', 'CNY', 'GBP'];
@@ -11,20 +12,17 @@ async function populateCurrencies() {
     try {
         const response = await fetch('https://api.frankfurter.app/currencies');
         const data = await response.json();
-        const availableCurrencies = Object.keys(data);
 
-        currencies.forEach(currency => {
-            if (availableCurrencies.includes(currency)) {
-                const option1 = document.createElement('option');
-                option1.value = currency;
-                option1.textContent = currency;
-                fromSelect.appendChild(option1);
+        Object.entries(data).forEach(([code, name]) => {
+            const option1 = document.createElement('option');
+            option1.value = code;
+            option1.textContent = `${code} (${name})`;
+            fromSelect.appendChild(option1);
 
-                const option2 = document.createElement('option');
-                option2.value = currency;
-                option2.textContent = currency;
-                toSelect.appendChild(option2);
-            }
+            const option2 = document.createElement('option');
+            option2.value = code;
+            option2.textContent = `${code} (${name})`;
+            toSelect.appendChild(option2);
         });
 
         fromSelect.value = 'USD';
@@ -55,6 +53,7 @@ async function convert() {
         const data = await response.json();
         const rate = data.rates[to];
         resultText.textContent = `${amount.toLocaleString()} ${from} = ${rate.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${to}`;
+        lastUpdatedText.textContent = `Last Updated: ${data.date}`;
     } catch (error) {
         console.error("Conversion failed:", error);
         resultText.textContent = "Error in conversion.";
