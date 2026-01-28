@@ -4,7 +4,6 @@ const amountInput = document.getElementById('amount');
 const swapButton = document.getElementById('swap');
 const resultText = document.getElementById('result-text');
 const lastUpdatedText = document.getElementById('last-updated');
-const darkModeToggle = document.getElementById('dark-mode-toggle');
 
 const currencies = ['USD', 'EUR', 'KRW', 'JPY', 'CNY', 'GBP'];
 
@@ -67,28 +66,13 @@ function swapCurrencies() {
     convert();
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    updateDarkModeButton();
-}
-
-function updateDarkModeButton() {
-    if (document.body.classList.contains('dark-mode')) {
-        darkModeToggle.textContent = 'Light Mode';
-    } else {
-        darkModeToggle.textContent = 'Dark Mode';
-    }
-}
-
 amountInput.addEventListener('input', convert);
 fromSelect.addEventListener('change', convert);
 toSelect.addEventListener('change', convert);
 swapButton.addEventListener('click', swapCurrencies);
-darkModeToggle.addEventListener('click', toggleDarkMode);
 
 document.addEventListener('DOMContentLoaded', () => {
     populateCurrencies();
-    updateDarkModeButton();
 
     // Popular Pairs functionality
     const popularPairs = document.querySelectorAll('.popular-pairs .pair');
