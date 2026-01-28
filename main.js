@@ -89,4 +89,46 @@ darkModeToggle.addEventListener('click', toggleDarkMode);
 document.addEventListener('DOMContentLoaded', () => {
     populateCurrencies();
     updateDarkModeButton();
+
+    // Popular Pairs functionality
+    const popularPairs = document.querySelectorAll('.popular-pairs .pair');
+    popularPairs.forEach(pair => {
+        pair.addEventListener('click', (e) => {
+            e.preventDefault();
+            fromSelect.value = pair.dataset.from;
+            toSelect.value = pair.dataset.to;
+            convert();
+            // Scroll to the top to see the result
+            const header = document.querySelector('.main-header');
+            if (header) {
+                const headerHeight = header.offsetHeight;
+                window.scrollTo({ top: headerHeight, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    });
+
+    // Clickable card functionality
+    const clickableCards = document.querySelectorAll('.clickable-card');
+    clickableCards.forEach(card => {
+        card.addEventListener('click', () => {
+            window.location.href = card.dataset.href;
+        });
+    });
+
+    // Cookie Consent Banner
+    const cookieBanner = document.getElementById('cookie-consent-banner');
+    const cookieDismiss = document.getElementById('cookie-consent-dismiss');
+
+    if (cookieBanner && cookieDismiss && !localStorage.getItem('cookieConsentDismissed')) {
+        setTimeout(() => {
+            cookieBanner.classList.add('show');
+        }, 2000); // Show after 2 seconds
+
+        cookieDismiss.addEventListener('click', () => {
+            cookieBanner.classList.remove('show');
+            localStorage.setItem('cookieConsentDismissed', 'true');
+        });
+    }
 });
